@@ -45,7 +45,7 @@ public class ServiceController {
 
     @GetMapping("/{id}")
     public ServiceDto findServiceById(@PathVariable Long id) {
-        Service service = serviceService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Servce not found, id: " + id));
+        Service service = serviceService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
         return serviceConverter.entityInDto(service);
     }
 
