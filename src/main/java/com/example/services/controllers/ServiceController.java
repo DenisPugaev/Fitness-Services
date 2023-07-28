@@ -27,7 +27,7 @@ public class ServiceController {
     private final ServiceConverter serviceConverter;
     private final ServiceValidator serviceValidator;
 
-
+//    http://localhost:8080/fitness-service/api/v1/service?page=1
     @GetMapping
     public Page<ServiceDto> findAllService(
             @RequestParam(name = "page") Integer page,
