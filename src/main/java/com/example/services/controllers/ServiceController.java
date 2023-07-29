@@ -64,6 +64,13 @@ public class ServiceController {
     }
 
 
+    @PostMapping
+    public ServiceDto addService(@RequestBody ServiceDto serviceDto) {
+        serviceValidator.validate(serviceDto);
+        Service service = serviceConverter.dtoInEntity(serviceDto);
+        Service savedService = serviceService.save(service);
+        return serviceConverter.entityInDto(savedService);
+    }
 
 
 

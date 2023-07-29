@@ -67,4 +67,12 @@ public class ServiceService {
         service.setDescription(service.getDescription());
         return service;
     }
+
+    public Service addService(ServiceDto serviceDto) {
+        Service service = new Service();
+        service.setTitle(serviceDto.getTitle());
+        service.setPrice(serviceDto.getPrice());
+        service.setDescription(serviceDto.getDescription());
+        return serviceRepository.save(service);
+    }
 }
