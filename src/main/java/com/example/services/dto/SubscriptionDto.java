@@ -5,17 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-/**
- * Класс "ServiceDto" будет удален.
- */
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceDto {
+public class SubscriptionDto {
     private Long id;
-    private String title;
+    private Long disciplineId;
+    private int workoutCount;
+    private LocalDate endDate;
     private BigDecimal price;
-    private String description;
-
-
 }

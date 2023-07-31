@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-
+/**
+Полностью переделать
+ */
 @Slf4j
 @org.springframework.stereotype.Service
 public class ServiceService {

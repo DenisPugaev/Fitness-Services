@@ -6,6 +6,9 @@ import com.example.services.entities.Service;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
+/**
+будет удален
+ */
 
 public class ServiceSpecifications {
     public static Specification<Service> priceGreaterOrEqualsThan(BigDecimal price) {

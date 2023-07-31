@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * Класс "Сервис" будет удален.
+ */
 @Data
 @Entity
 @Table(name = "service")
