@@ -1,8 +1,7 @@
 package com.example.services.validators;
 
 
-import com.example.services.dto.ServiceDto;
-
+import com.example.services.dto.SubscriptionDto;
 import com.example.services.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
@@ -15,19 +14,19 @@ import java.util.List;
 @Component
 public class ServiceValidator {
 
-    public void validate(ServiceDto serviceDto) {
+    public void validate(SubscriptionDto SubscriptionDto) {
         List<String> errors = new ArrayList<>();
-        if (serviceDto.getPrice().compareTo(BigDecimal.ONE) <= 0) {
+        if (SubscriptionDto.getPrice().compareTo(BigDecimal.ONE) <= 0) {
             errors.add("Неверно установлена цена услуги! Цена не может быть меньше 1!");
         }
-        if (serviceDto.getTitle().isBlank()) {
-            errors.add("Имя услуги не может быть путстым!");
+//        if (SubscriptionDto.getTitle().isBlank()) {
+//            errors.add("Имя услуги не может быть путстым!");
+//        }
+//        if (SubscriptionDto.getDescription().isBlank()) {
+//            errors.add("Описание услуги не может быть пустым!");
         }
-        if (serviceDto.getDescription().isBlank()) {
-            errors.add("Описание услуги не может быть пустым!");
-        }
-        if(!errors.isEmpty()){
-            throw new ValidationException(errors);
-        }
+//        if(!errors.isEmpty()){
+//            throw new ValidationException(errors);
+//        }
     }
-}
+

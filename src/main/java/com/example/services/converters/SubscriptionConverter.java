@@ -20,7 +20,7 @@ public class SubscriptionConverter {
      * @param subscriptionDto объект SubscriptionDto
      * @return объект Subscription
      */
-    public Subscription dtoInEntity(SubscriptionDto subscriptionDto) {
+    public static Subscription dtoInEntity(SubscriptionDto subscriptionDto) {
         Discipline discipline = new Discipline(subscriptionDto.getDisciplineId(), null, null);
         return new Subscription(discipline, subscriptionDto.getEndDate(), subscriptionDto.getPrice(), subscriptionDto.getWorkoutCount());
     }
@@ -31,7 +31,7 @@ public class SubscriptionConverter {
      * @param subscription объект Subscription
      * @return объект SubscriptionDto
      */
-    public SubscriptionDto entityInDto(Subscription subscription) {
+    public static SubscriptionDto entityInDto(Subscription subscription) {
         Long disciplineId = subscription.getDiscipline() != null ? subscription.getDiscipline().getId() : null;
         return new SubscriptionDto(subscription.getId(), disciplineId, subscription.getWorkoutCount(), subscription.getEndDate(), subscription.getPrice());
     }
