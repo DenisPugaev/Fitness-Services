@@ -2,12 +2,15 @@ package com.example.services.services;
 
 
 import com.example.services.dto.SubscriptionDto;
+import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
 
+import com.example.services.repository.DisciplineRepository;
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,7 +27,10 @@ import java.util.Optional;
 @org.springframework.stereotype.Service
 public class SubscriptionService {
 
+
     SubscriptionRepository subscriptionRepository;
+    @Autowired
+    DisciplineRepository disciplineRepository;
     public SubscriptionService( SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
     }
@@ -67,11 +73,13 @@ public class SubscriptionService {
         return service;
     }
 
-    public Subscription addService(SubscriptionDto SubscriptionDto) {
+    public Subscription addSubscription(SubscriptionDto subscriptionDto) {
         Subscription subscription = new Subscription();
-//        subscription.setTitle(SubscriptionDto.getTitle());
-        subscription.setPrice(SubscriptionDto.getPrice());
-//        subscription.setDescription(SubscriptionDto.getDescription());
+        Optional<Discipline> discipline = disciplineRepository.findById(subscriptionDto.getDisciplineId());
+        subscription.setDiscipline(discipline);
+        subscription.setWorkoutCount(subscriptionDto.getWorkoutCount());
+        subscription.setEndDate(subscriptionDto.getEndDate());
+        subscription.setPrice(subscriptionDto.getPrice());
         return subscriptionRepository.save(subscription);
     }
 }

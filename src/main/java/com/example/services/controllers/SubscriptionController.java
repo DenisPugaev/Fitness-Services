@@ -45,13 +45,13 @@ public class SubscriptionController {
             page = 1;
         }
 
-        return subscriptionService.findAll(minPrice, maxPrice, titlePart, page).map(SubscriptionConverter::entityInDto);
+        return subscriptionService.findAll(minPrice, maxPrice, titlePart, page).map(subscriptionConverter::entityInDto);
     }
 
     @GetMapping("/{id}")
     public SubscriptionDto findServiceById(@PathVariable Long id) {
         Subscription subscription = subscriptionService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
-        return SubscriptionConverter.entityInDto(subscription);
+        return subscriptionConverter.entityInDto(subscription);
     }
 
 
@@ -60,7 +60,7 @@ public class SubscriptionController {
     public SubscriptionDto updateService(@RequestBody SubscriptionDto subscriptionDto) {
         serviceValidator.validate(subscriptionDto);
         Subscription subscription = subscriptionService.update(subscriptionDto);
-        return SubscriptionConverter.entityInDto(subscription);
+        return subscriptionConverter.entityInDto(subscription);
     }
 
     @DeleteMapping("/{id}")
@@ -71,10 +71,10 @@ public class SubscriptionController {
 
     @PostMapping
     public SubscriptionDto addService(@RequestBody SubscriptionDto subscriptionDto) {
-        serviceValidator.validate(subscriptionDto);
-        Subscription subscription = SubscriptionConverter.dtoInEntity(subscriptionDto);
-        Subscription savedsubscription = subscriptionService.save(subscription);
-        return SubscriptionConverter.entityInDto(savedsubscription);
+//        serviceValidator.validate(subscriptionDto);
+//        Subscription subscription = subscriptionConverter.dtoInEntity(subscriptionDto);
+        Subscription savedsubscription = subscriptionService.addSubscription(subscriptionDto);
+        return subscriptionConverter.entityInDto(savedsubscription);
     }
 
 

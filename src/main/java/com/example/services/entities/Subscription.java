@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Класс, представляющий сущность "Подписка".
@@ -20,7 +21,7 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "discipline_id", referencedColumnName = "id")
     private Discipline discipline;
 
@@ -44,4 +45,12 @@ public class Subscription {
 
     public Subscription() {
     }
+
+//    public void setDiscipline(Optional<Discipline> discipline) {
+//        this.discipline = discipline
+//    }
+
+//    public void setDiscipline(Optional <Discipline> discipline) {
+//        this.discipline = discipline;
+//    }
 }

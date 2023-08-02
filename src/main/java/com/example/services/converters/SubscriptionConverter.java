@@ -3,6 +3,7 @@ package com.example.services.converters;
 import com.example.services.dto.SubscriptionDto;
 import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
+import com.example.services.repository.DisciplineRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SubscriptionConverter {
+   private DisciplineRepository disciplineRepository;
 
     /**
      * Метод dtoInEntity выполняет преобразование объекта SubscriptionDto в объект Subscription.
@@ -20,8 +22,9 @@ public class SubscriptionConverter {
      * @param subscriptionDto объект SubscriptionDto
      * @return объект Subscription
      */
-    public static Subscription dtoInEntity(SubscriptionDto subscriptionDto) {
-        Discipline discipline = new Discipline(subscriptionDto.getDisciplineId(), null, null);
+    public  Subscription dtoInEntity(SubscriptionDto subscriptionDto) {
+
+        Discipline discipline = new Discipline(null, null, null);
         return new Subscription(discipline, subscriptionDto.getEndDate(), subscriptionDto.getPrice(), subscriptionDto.getWorkoutCount());
     }
 
@@ -31,7 +34,7 @@ public class SubscriptionConverter {
      * @param subscription объект Subscription
      * @return объект SubscriptionDto
      */
-    public static SubscriptionDto entityInDto(Subscription subscription) {
+    public  SubscriptionDto entityInDto(Subscription subscription) {
         Long disciplineId = subscription.getDiscipline() != null ? subscription.getDiscipline().getId() : null;
         return new SubscriptionDto(subscription.getId(), disciplineId, subscription.getWorkoutCount(), subscription.getEndDate(), subscription.getPrice());
     }

@@ -19,14 +19,15 @@ public class ServiceValidator {
         if (SubscriptionDto.getPrice().compareTo(BigDecimal.ONE) <= 0) {
             errors.add("Неверно установлена цена услуги! Цена не может быть меньше 1!");
         }
-//        if (SubscriptionDto.getTitle().isBlank()) {
-//            errors.add("Имя услуги не может быть путстым!");
-//        }
-//        if (SubscriptionDto.getDescription().isBlank()) {
-//            errors.add("Описание услуги не может быть пустым!");
+        if (SubscriptionDto.getWorkoutCount() < 0) {
+            errors.add("Количество тренировок не может быть отрицательным!");
         }
+////        if (SubscriptionDto.getDescription().isBlank()) {
+////            errors.add("Описание услуги не может быть пустым!");
+//        }
 //        if(!errors.isEmpty()){
 //            throw new ValidationException(errors);
 //        }
     }
+}
 
