@@ -68,7 +68,7 @@ public class SubscriptionController {
         subscriptionService.deleteById(id);
     }
 
-
+    // Не работает добавление новой подписки! Проверить, исправить.
     @PostMapping
     public SubscriptionDto addService(@RequestBody SubscriptionDto subscriptionDto) {
 //        serviceValidator.validate(subscriptionDto);

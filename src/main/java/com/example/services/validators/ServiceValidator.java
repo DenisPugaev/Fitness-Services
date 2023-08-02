@@ -14,6 +14,7 @@ import java.util.List;
 @Component
 public class ServiceValidator {
 
+    // доделать валидатор, добавить проверки
     public void validate(SubscriptionDto SubscriptionDto) {
         List<String> errors = new ArrayList<>();
         if (SubscriptionDto.getPrice().compareTo(BigDecimal.ONE) <= 0) {

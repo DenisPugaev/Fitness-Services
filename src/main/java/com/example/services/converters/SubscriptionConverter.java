@@ -23,7 +23,7 @@ public class SubscriptionConverter {
      * @return объект Subscription
      */
     public  Subscription dtoInEntity(SubscriptionDto subscriptionDto) {
-
+        // Проверить и исправить null
         Discipline discipline = new Discipline(null, null, null);
         return new Subscription(discipline, subscriptionDto.getEndDate(), subscriptionDto.getPrice(), subscriptionDto.getWorkoutCount());
     }
