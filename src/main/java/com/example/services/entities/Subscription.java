@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 @Data
 @Entity
-@Table(name = "subscription")
+@Table(name = "subscriptions")
 public class Subscription {
 
     @Id
