@@ -76,7 +76,8 @@ public class SubscriptionService {
     public Subscription addSubscription(SubscriptionDto subscriptionDto) {
         Subscription subscription = new Subscription();
         Optional<Discipline> discipline = disciplineRepository.findById(subscriptionDto.getDisciplineId());
-        subscription.setDiscipline(discipline);
+       // subscription.setDiscipline(discipline); в сущность пытаешься подставить опционал
+        subscription.setDiscipline(discipline.get());
         subscription.setWorkoutCount(subscriptionDto.getWorkoutCount());
         subscription.setEndDate(subscriptionDto.getEndDate());
         subscription.setPrice(subscriptionDto.getPrice());

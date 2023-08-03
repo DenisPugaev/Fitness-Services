@@ -3,13 +3,15 @@ package com.example.services.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Класс "Дисциплина" представляет сущность дисциплины.
  * Он содержит информацию о названии и описании дисциплины.
  */
 @Data
 @Entity
-@Table(name = "discipline")
+@Table(name = "disciplines")
 public class Discipline {
 
     @Id
@@ -26,7 +28,9 @@ public class Discipline {
         this.name = name;
         this.description = description;
     }
-
+    
+    @OneToMany(mappedBy = "discipline",cascade =CascadeType.PERSIST)
+    private List<Subscription> subscriptions;
     public Discipline() {
     }
 }
