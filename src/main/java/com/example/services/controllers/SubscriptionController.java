@@ -69,12 +69,11 @@ public class SubscriptionController {
 
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     public void deleteServiceById(@PathVariable Long id) {
         subscriptionService.deleteById(id);
     }
 
-    // Не работает добавление новой подписки! Проверить, исправить.
     @PostMapping("/add")
     public SubscriptionResponse addService(
             @RequestParam(name="subId") Long subId,
@@ -88,6 +87,12 @@ public class SubscriptionController {
         return  subscriptionService.addSubscription(subId,disciplineId,workoutCount,daysToExpire,price);
 
     }
+
+    @PostMapping("/buy/{id}")
+    public void makeABuy(@RequestHeader(name = "login")String login, @PathVariable(name = "id")Long id){
+        subscriptionService.makeABuy(login,id);
+    }
+
 
 
 

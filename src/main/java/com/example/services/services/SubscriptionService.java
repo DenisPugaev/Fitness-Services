@@ -4,10 +4,12 @@ package com.example.services.services;
 import com.example.services.converters.SubscriptionConverter;
 import com.example.services.dto.SubscriptionRequest;
 import com.example.services.dto.SubscriptionResponse;
+import com.example.services.dto.SubscriptionToProductRequest;
 import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
 
+import com.example.services.integrations.AccountServiceIntegration;
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 /**
 Полностью переделать
@@ -35,6 +39,7 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final DisciplineService disciplineService;
     private final SubscriptionConverter subscriptionConverter;
+    private final AccountServiceIntegration accountService;
 
 
     public Page<SubscriptionResponse> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
@@ -88,5 +93,20 @@ public class SubscriptionService {
         subscription.setPrice(price);
         subscriptionRepository.save(subscription);
         return subscriptionConverter.subscriptionToResponse(subscription);
+    }
+
+    @Transactional
+    public void makeABuy(String login,Long id) {
+
+        Subscription sub = subscriptionRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Невозможно обновить услугу! ID:" + id + " не найден!"));
+        SubscriptionToProductRequest productRequest= SubscriptionToProductRequest.builder()
+                .login(login)
+                .discipline(sub.getDiscipline().getName())
+                .expired(LocalDate.now().plusDays(sub.getDaysToExpire()))
+                .numOfWorkouts(sub.getWorkoutCount())
+                .build();
+        accountService.makeABuy(productRequest);
+
     }
 }
