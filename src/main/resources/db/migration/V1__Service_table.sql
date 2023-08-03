@@ -21,7 +21,7 @@ VALUES
     (4, 'Discipline 4', 'Description 4'),
     (5, 'Discipline 5', 'Description 5');
 
-INSERT INTO subscriptions ( discipline_id, workout_count, end_date, price)
+INSERT INTO subscriptions ( discipline_id, workout_count,days_to_expire , price)
 VALUES
     (1, 2,30, 500.0 ),
     (2, 4,30, 1500.0),
