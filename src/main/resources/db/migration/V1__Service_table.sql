@@ -1,21 +1,21 @@
-CREATE TABLE discipline (
+CREATE TABLE disciplines(
                             id INT AUTO_INCREMENT,
                             name VARCHAR(255),
                             description VARCHAR(255),
                             PRIMARY KEY(id)
 );
 
-CREATE TABLE subscription (
+CREATE TABLE subscriptions(
                               id INT AUTO_INCREMENT,
                               discipline_id INT,
                               workout_count INT,
                               end_date DATE,
                               price DECIMAL(10, 2) NOT NULL,
                               PRIMARY KEY(id),
-                              FOREIGN KEY (discipline_id) REFERENCES discipline(id)
+                              FOREIGN KEY (discipline_id) REFERENCES disciplines(id)
 );
 
-INSERT INTO discipline (id, name, description)
+INSERT INTO disciplines (id, name, description)
 VALUES
     (1, 'Discipline 1', 'Description 1'),
     (2, 'Discipline 2', 'Description 2'),
@@ -23,7 +23,7 @@ VALUES
     (4, 'Discipline 4', 'Description 4'),
     (5, 'Discipline 5', 'Description 5');
 
-INSERT INTO subscription ( discipline_id, workout_count, end_date, price)
+INSERT INTO subscriptions ( discipline_id, workout_count, end_date, price)
 VALUES
     (1, 2, DATE '2021-08-23', 500.0 ),
     (2, 4, DATE '2021-08-23', 1500.0),
