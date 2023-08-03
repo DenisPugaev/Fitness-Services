@@ -14,15 +14,16 @@ import java.util.Optional;
  */
 @Data
 @Entity
-@Table(name = "subscription")
+@Table(name = "subscriptions")
 public class Subscription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "discipline_id", referencedColumnName = "id")
+    ///@ManyToOne(cascade = {CascadeType.ALL}) вполне достаточно persist
+    @ManyToOne
+    @JoinColumn(name = "discipline_id")
     private Discipline discipline;
 
     @Column(name = "workout_count")

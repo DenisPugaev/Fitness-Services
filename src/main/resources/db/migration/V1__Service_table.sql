@@ -1,21 +1,19 @@
-CREATE TABLE discipline (
-                            id INT AUTO_INCREMENT,
+CREATE TABLE disciplines(
+                            id bigserial PRIMARY KEY,
                             name VARCHAR(255),
-                            description VARCHAR(255),
-                            PRIMARY KEY(id)
+                            description VARCHAR(255)
+
 );
 
-CREATE TABLE subscription (
-                              id INT AUTO_INCREMENT,
-                              discipline_id INT,
+CREATE TABLE subscriptions(
+                              id bigserial PRIMARY KEY,
+                              discipline_id BIGINT REFERENCES disciplines(id),
                               workout_count INT,
                               end_date DATE,
-                              price DECIMAL(10, 2) NOT NULL,
-                              PRIMARY KEY(id),
-                              FOREIGN KEY (discipline_id) REFERENCES discipline(id)
+                              price DECIMAL(10, 2)
 );
 
-INSERT INTO discipline (id, name, description)
+INSERT INTO disciplines (id, name, description)
 VALUES
     (1, 'Discipline 1', 'Description 1'),
     (2, 'Discipline 2', 'Description 2'),
@@ -23,10 +21,10 @@ VALUES
     (4, 'Discipline 4', 'Description 4'),
     (5, 'Discipline 5', 'Description 5');
 
-INSERT INTO subscription ( discipline_id, workout_count, end_date, price)
+INSERT INTO subscriptions ( discipline_id, workout_count, end_date, price)
 VALUES
-    (1, 2, DATE '2021-08-23', 500.0 ),
-    (2, 4, DATE '2021-08-23', 1500.0),
-    (3, 8, DATE '2021-08-23', 4500.0),
-    (4, 3, DATE '2021-08-23', 2500.0),
-    (5, 1, DATE '2021-08-23', 5100.0);
+    (1, 2,'2021-08-23', 500.0 ),
+    (2, 4,'2021-08-23', 1500.0),
+    (3, 8,'2021-08-23', 4500.0),
+    (4, 3,'2021-08-23', 2500.0),
+    (5, 1,'2021-08-23', 5100.0);
