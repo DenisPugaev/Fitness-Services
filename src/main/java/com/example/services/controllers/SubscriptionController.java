@@ -4,8 +4,8 @@ package com.example.services.controllers;
 
 
 
-import com.example.services.converters.SubscriptionConverter;
-import com.example.services.dto.SubscriptionDto;
+import com.example.services.dto.SubscriptionRequest;
+import com.example.services.dto.SubscriptionResponse;
 import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
 import com.example.services.services.SubscriptionService;
@@ -14,27 +14,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-/**
- Полностью переделать
- */
+
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/service")
+@RequestMapping("/api/v1/subscriptions")
 @RequiredArgsConstructor
 public class SubscriptionController {
 
 
     private final SubscriptionService subscriptionService;
-    private final SubscriptionConverter subscriptionConverter;
+
     private final ServiceValidator serviceValidator;
 
 //    http://localhost:8080/fitness-service/api/v1/service?page=1
     @GetMapping
-    public Page<SubscriptionDto> findAllService(
+    public Page<SubscriptionResponse> findAllService(
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
             @RequestParam(name = "max_price", required = false) BigDecimal maxPrice,
@@ -44,23 +44,29 @@ public class SubscriptionController {
         if (page < 1) {
             page = 1;
         }
-
-        return subscriptionService.findAll(minPrice, maxPrice, titlePart, page).map(subscriptionConverter::entityInDto);
+        return subscriptionService.findAll(minPrice, maxPrice, titlePart, page);
     }
 
     @GetMapping("/{id}")
-    public SubscriptionDto findServiceById(@PathVariable Long id) {
-        Subscription subscription = subscriptionService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
-        return subscriptionConverter.entityInDto(subscription);
+    public SubscriptionResponse findServiceById(@PathVariable("id") Long id) {
+       return subscriptionService.findById(id)
+               .orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
+
     }
 
 
+//С фронта поэтому лучше Request param
+    @PostMapping("/update")
+    public SubscriptionResponse updateService(
+            @RequestParam(name="subId") Long subId,
+            @RequestParam(name ="discId",required = false )Long disciplineId,
+            @RequestParam(name ="workCount",required = false )Integer workoutCount,
+            @RequestParam(name ="daysExp",required = false)Integer daysToExpire,
+            @RequestParam(name ="price",required = false)BigDecimal price
+    ) {
+        //serviceValidator.validate(subscriptionRequest);
+        return  subscriptionService.update(subId,disciplineId,workoutCount,daysToExpire,price);
 
-    @PutMapping
-    public SubscriptionDto updateService(@RequestBody SubscriptionDto subscriptionDto) {
-        serviceValidator.validate(subscriptionDto);
-        Subscription subscription = subscriptionService.update(subscriptionDto);
-        return subscriptionConverter.entityInDto(subscription);
     }
 
     @DeleteMapping("/{id}")
@@ -69,12 +75,18 @@ public class SubscriptionController {
     }
 
     // Не работает добавление новой подписки! Проверить, исправить.
-    @PostMapping
-    public SubscriptionDto addService(@RequestBody SubscriptionDto subscriptionDto) {
+    @PostMapping("/add")
+    public SubscriptionResponse addService(
+            @RequestParam(name="subId") Long subId,
+            @RequestParam(name ="discId")Long disciplineId,
+            @RequestParam(name ="workCount")Integer workoutCount,
+            @RequestParam(name ="daysExp")Integer daysToExpire,
+            @RequestParam(name ="price")BigDecimal price
+    ) {
 //        serviceValidator.validate(subscriptionDto);
 //        Subscription subscription = subscriptionConverter.dtoInEntity(subscriptionDto);
-        Subscription savedsubscription = subscriptionService.addSubscription(subscriptionDto);
-        return subscriptionConverter.entityInDto(savedsubscription);
+        return  subscriptionService.addSubscription(subId,disciplineId,workoutCount,daysToExpire,price);
+
     }
 
 

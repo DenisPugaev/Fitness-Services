@@ -9,7 +9,7 @@ CREATE TABLE subscriptions(
                               id bigserial PRIMARY KEY,
                               discipline_id BIGINT REFERENCES disciplines(id),
                               workout_count INT,
-                              end_date DATE,
+                              days_to_expire INT,
                               price DECIMAL(10, 2)
 );
 
@@ -23,8 +23,8 @@ VALUES
 
 INSERT INTO subscriptions ( discipline_id, workout_count, end_date, price)
 VALUES
-    (1, 2,'2021-08-23', 500.0 ),
-    (2, 4,'2021-08-23', 1500.0),
-    (3, 8,'2021-08-23', 4500.0),
-    (4, 3,'2021-08-23', 2500.0),
-    (5, 1,'2021-08-23', 5100.0);
+    (1, 2,30, 500.0 ),
+    (2, 4,30, 1500.0),
+    (3, 8,30, 4500.0),
+    (4, 3,30, 2500.0),
+    (5, 1,30, 5100.0);
