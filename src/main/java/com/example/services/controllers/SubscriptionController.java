@@ -32,7 +32,7 @@ public class SubscriptionController {
 
     private final ServiceValidator serviceValidator;
 
-//    http://localhost:8080/fitness-service/api/v1/service?page=1
+//    http://localhost:8193/subscription-service/api/v1/subscriptions?page=1
     @GetMapping
     public Page<SubscriptionResponse> findAllService(
             @RequestParam(name = "page") Integer page,
@@ -82,8 +82,7 @@ public class SubscriptionController {
             @RequestParam(name ="daysExp")Integer daysToExpire,
             @RequestParam(name ="price")BigDecimal price
     ) {
-//        serviceValidator.validate(subscriptionDto);
-//        Subscription subscription = subscriptionConverter.dtoInEntity(subscriptionDto);
+
         return  subscriptionService.addSubscription(subId,disciplineId,workoutCount,daysToExpire,price);
 
     }

@@ -1,8 +1,8 @@
 package com.example.services.validators;
 
 
-import com.example.services.dto.SubscriptionDto;
-
+import com.example.services.dto.SubscriptionResponse;
+import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ValidationException;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +16,17 @@ import java.util.List;
 @Component
 public class ServiceValidator {
 
-    // доделать валидатор, добавить проверки
-    public void validate(SubscriptionDto subscriptionDto) {
+
+    public void validate(Subscription subscription) {
         List<String> errors = new ArrayList<>();
-        if (subscriptionDto.getPrice().compareTo(BigDecimal.ONE) <= 0) {
-            errors.add("Неверно установлена цена подписки! Цена не может быть меньше 0!");
+        if (subscription.getPrice().compareTo(BigDecimal.ONE) <= 0) {
+            errors.add("Неверно установлена цена абонемента! Цена не может быть меньше 0!");
         }
-        if (subscriptionDto.getWorkoutCount() < 0) {
+        if (subscription.getWorkoutCount() < 0) {
             errors.add("Количество тренировок не может быть отрицательным!");
         }
-        if (subscriptionDto.getEndDate() == null || subscriptionDto.getEndDate().isBefore(LocalDate.now())) {
-            errors.add("Указана некорректная дата");
+        if (subscription.getDaysToExpire() == null || subscription.getDaysToExpire()<0) {
+            errors.add("Количество дней до окончания абонемента не может быть отрицательным!");
         }
         if(!errors.isEmpty()){
             throw new ValidationException(errors);

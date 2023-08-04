@@ -12,6 +12,7 @@ import com.example.services.exceptions.ResourceNotFoundException;
 import com.example.services.integrations.AccountServiceIntegration;
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
+import com.example.services.validators.ServiceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ public class SubscriptionService {
     private final DisciplineService disciplineService;
     private final SubscriptionConverter subscriptionConverter;
     private final AccountServiceIntegration accountService;
+    private  final ServiceValidator serviceValidator;
 
 
     public Page<SubscriptionResponse> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
@@ -86,11 +88,11 @@ public class SubscriptionService {
     public SubscriptionResponse addSubscription(Long subId, Long disciplineId,Integer workoutCount, Integer daysToExpire, BigDecimal price) {
         Subscription subscription = new Subscription();
         Optional<Discipline> discipline =disciplineService.findById(disciplineId);
-       // subscription.setDiscipline(discipline); в сущность пытаешься подставить опционал
         subscription.setDiscipline(discipline.get());
         subscription.setWorkoutCount(workoutCount);
         subscription.setDaysToExpire(daysToExpire);
         subscription.setPrice(price);
+        serviceValidator.validate(subscription );
         subscriptionRepository.save(subscription);
         return subscriptionConverter.subscriptionToResponse(subscription);
     }
