@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 
 /**
@@ -33,10 +32,6 @@ public class Subscription {
 
     @Column(name = "price")
     private BigDecimal price;
-
-
-
-
 
 
 }

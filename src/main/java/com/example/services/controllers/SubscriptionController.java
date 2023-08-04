@@ -1,18 +1,13 @@
 package com.example.services.controllers;
 
 
-import com.example.services.dto.SubscriptionRequest;
 import com.example.services.dto.SubscriptionResponse;
-import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
 import com.example.services.services.SubscriptionService;
 import com.example.services.validators.ServiceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
