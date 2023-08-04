@@ -1,9 +1,6 @@
 package com.example.services.controllers;
 
 
-
-
-
 import com.example.services.dto.SubscriptionRequest;
 import com.example.services.dto.SubscriptionResponse;
 import com.example.services.entities.Subscription;
@@ -32,7 +29,7 @@ public class SubscriptionController {
 
     private final ServiceValidator serviceValidator;
 
-//    http://localhost:8193/subscription-service/api/v1/subscriptions?page=1
+    //    http://localhost:8193/subscription-service/api/v1/subscriptions?page=1
     @GetMapping
     public Page<SubscriptionResponse> findAllService(
             @RequestParam(name = "page") Integer page,
@@ -49,23 +46,22 @@ public class SubscriptionController {
 
     @GetMapping("/{id}")
     public SubscriptionResponse findServiceById(@PathVariable("id") Long id) {
-       return subscriptionService.findById(id)
-               .orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
+        return subscriptionService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
 
     }
 
 
-//С фронта поэтому лучше Request param
+    //С фронта поэтому лучше Request param
     @PostMapping("/update")
     public SubscriptionResponse updateService(
-            @RequestParam(name="subId") Long subId,
-            @RequestParam(name ="discId",required = false )Long disciplineId,
-            @RequestParam(name ="workCount",required = false )Integer workoutCount,
-            @RequestParam(name ="daysExp",required = false)Integer daysToExpire,
-            @RequestParam(name ="price",required = false)BigDecimal price
+            @RequestParam(name = "subId") Long subId,
+            @RequestParam(name = "discId", required = false) Long disciplineId,
+            @RequestParam(name = "workCount", required = false) Integer workoutCount,
+            @RequestParam(name = "daysExp", required = false) Integer daysToExpire,
+            @RequestParam(name = "price", required = false) BigDecimal price
     ) {
-        //serviceValidator.validate(subscriptionRequest);
-        return  subscriptionService.update(subId,disciplineId,workoutCount,daysToExpire,price);
+        return subscriptionService.update(subId, disciplineId, workoutCount, daysToExpire, price);
 
     }
 
@@ -76,23 +72,21 @@ public class SubscriptionController {
 
     @PostMapping("/add")
     public SubscriptionResponse addService(
-            @RequestParam(name="subId") Long subId,
-            @RequestParam(name ="discId")Long disciplineId,
-            @RequestParam(name ="workCount")Integer workoutCount,
-            @RequestParam(name ="daysExp")Integer daysToExpire,
-            @RequestParam(name ="price")BigDecimal price
+            @RequestParam(name = "subId") Long subId,
+            @RequestParam(name = "discId") Long disciplineId,
+            @RequestParam(name = "workCount") Integer workoutCount,
+            @RequestParam(name = "daysExp") Integer daysToExpire,
+            @RequestParam(name = "price") BigDecimal price
     ) {
 
-        return  subscriptionService.addSubscription(subId,disciplineId,workoutCount,daysToExpire,price);
+        return subscriptionService.addSubscription(subId, disciplineId, workoutCount, daysToExpire, price);
 
     }
 
     @PostMapping("/buy/{id}")
-    public void makeABuy(@RequestHeader(name = "login")String login, @PathVariable(name = "id")Long id){
-        subscriptionService.makeABuy(login,id);
+    public void makeABuy(@RequestHeader(name = "login") String login, @PathVariable(name = "id") Long id) {
+        subscriptionService.makeABuy(login, id);
     }
-
-
 
 
 }

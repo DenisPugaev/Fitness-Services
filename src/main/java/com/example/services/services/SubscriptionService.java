@@ -81,6 +81,7 @@ public class SubscriptionService {
         if(workoutCount!=null) sub.setWorkoutCount(workoutCount);
         if(daysToExpire!=null) sub.setDaysToExpire(daysToExpire);
         if(price!=null) sub.setPrice(price);
+        serviceValidator.validate(sub);
         subscriptionRepository.save(sub);
         return subscriptionConverter.subscriptionToResponse(sub);
     }
