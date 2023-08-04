@@ -71,8 +71,7 @@ public class SubscriptionController {
     // Не работает добавление новой подписки! Проверить, исправить.
     @PostMapping
     public SubscriptionDto addService(@RequestBody SubscriptionDto subscriptionDto) {
-//        serviceValidator.validate(subscriptionDto);
-//        Subscription subscription = subscriptionConverter.dtoInEntity(subscriptionDto);
+        serviceValidator.validate(subscriptionDto);
         Subscription savedsubscription = subscriptionService.addSubscription(subscriptionDto);
         return subscriptionConverter.entityInDto(savedsubscription);
     }

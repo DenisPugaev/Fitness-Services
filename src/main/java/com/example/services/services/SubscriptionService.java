@@ -6,9 +6,11 @@ import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
 
+import com.example.services.exceptions.ValidationException;
 import com.example.services.repository.DisciplineRepository;
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
+import com.example.services.validators.ServiceValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,11 +31,15 @@ public class SubscriptionService {
 
 
     SubscriptionRepository subscriptionRepository;
-    @Autowired
     DisciplineRepository disciplineRepository;
-    public SubscriptionService( SubscriptionRepository subscriptionRepository) {
+    ServiceValidator serviceValidator;
+
+    @Autowired
+    public SubscriptionService(SubscriptionRepository subscriptionRepository, DisciplineRepository disciplineRepository) {
         this.subscriptionRepository = subscriptionRepository;
+        this.disciplineRepository = disciplineRepository;
     }
+
 
     public Page<Subscription> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
         Specification<Subscription> spec = Specification.where(null);
@@ -75,9 +81,10 @@ public class SubscriptionService {
 
     public Subscription addSubscription(SubscriptionDto subscriptionDto) {
         Subscription subscription = new Subscription();
-        Optional<Discipline> discipline = disciplineRepository.findById(subscriptionDto.getDisciplineId());
-       // subscription.setDiscipline(discipline); в сущность пытаешься подставить опционал
-        subscription.setDiscipline(discipline.get());
+        Long disciplineId = subscriptionDto.getDisciplineId();
+        Optional<Discipline> discipline = disciplineRepository.findById(disciplineId);
+        Discipline resolvedDiscipline = discipline.orElseThrow(() -> new ResourceNotFoundException("Дисциплина ID:"+ disciplineId +" не найдена"));
+        subscription.setDiscipline(resolvedDiscipline);
         subscription.setWorkoutCount(subscriptionDto.getWorkoutCount());
         subscription.setEndDate(subscriptionDto.getEndDate());
         subscription.setPrice(subscriptionDto.getPrice());
