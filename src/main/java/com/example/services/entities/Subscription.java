@@ -6,6 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 
+
 /**
  * Класс, представляющий сущность "Подписка".
  * Содержит информацию о подписке, такую как связанная дисциплина,
@@ -32,6 +33,8 @@ public class Subscription {
 
     @Column(name = "price")
     private BigDecimal price;
+
+
 
 
 }
