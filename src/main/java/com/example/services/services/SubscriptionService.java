@@ -71,23 +71,22 @@ public class SubscriptionService {
 
 
     @Transactional
-    public Subscription update(SubscriptionDto SubscriptionDto) {
-        Subscription service = subscriptionRepository.findById(SubscriptionDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + SubscriptionDto.getId() + " не найден!"));
+    public Subscription update(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
+        Subscription service = subscriptionRepository.findById(subId).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + subId + " не найден!"));
 //        service.setTitle(SubscriptionDto.getTitle());
-        service.setPrice(SubscriptionDto.getPrice());
+        service.setPrice(price);
 //        service.setDescription(service.getDescription());
         return service;
     }
 
-    public Subscription addSubscription(SubscriptionDto subscriptionDto) {
+    public Subscription addSubscription(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
         Subscription subscription = new Subscription();
-        Long disciplineId = subscriptionDto.getDisciplineId();
         Optional<Discipline> discipline = disciplineRepository.findById(disciplineId);
         Discipline resolvedDiscipline = discipline.orElseThrow(() -> new ResourceNotFoundException("Дисциплина ID:"+ disciplineId +" не найдена"));
         subscription.setDiscipline(resolvedDiscipline);
-        subscription.setWorkoutCount(subscriptionDto.getWorkoutCount());
-        subscription.setEndDate(subscriptionDto.getEndDate());
-        subscription.setPrice(subscriptionDto.getPrice());
+        subscription.setWorkoutCount(workoutCount);
+
+
         return subscriptionRepository.save(subscription);
     }
 }
