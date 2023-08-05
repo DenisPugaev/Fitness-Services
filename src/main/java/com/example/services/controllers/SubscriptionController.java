@@ -67,14 +67,13 @@ public class SubscriptionController {
 
     @PostMapping("/add")
     public SubscriptionResponse addService(
-            @RequestParam(name = "subId") Long subId,
             @RequestParam(name = "discId") Long disciplineId,
             @RequestParam(name = "workCount") Integer workoutCount,
             @RequestParam(name = "daysExp") Integer daysToExpire,
             @RequestParam(name = "price") BigDecimal price
     ) {
 
-        return subscriptionService.addSubscription(subId, disciplineId, workoutCount, daysToExpire, price);
+        return subscriptionService.addSubscription(disciplineId, workoutCount, daysToExpire, price);
 
     }
 

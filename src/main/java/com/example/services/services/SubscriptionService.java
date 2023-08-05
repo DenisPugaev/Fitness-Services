@@ -82,7 +82,7 @@ public class SubscriptionService {
         return subscriptionConverter.subscriptionToResponse(sub);
     }
 
-    public SubscriptionResponse addSubscription(Long subId, Long disciplineId, Integer workoutCount, Integer daysToExpire, BigDecimal price) {
+    public SubscriptionResponse addSubscription(Long disciplineId, Integer workoutCount, Integer daysToExpire, BigDecimal price) {
         Subscription subscription = new Subscription();
         Optional<Discipline> discipline = disciplineService.findById(disciplineId);
         subscription.setDiscipline(discipline.get());
