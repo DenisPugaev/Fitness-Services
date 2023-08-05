@@ -2,21 +2,25 @@ package com.example.services.services;
 
 
 import com.example.services.converters.SubscriptionConverter;
+
 import com.example.services.dto.SubscriptionResponse;
 import com.example.services.dto.SubscriptionToProductRequest;
 import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
 import com.example.services.integrations.AccountServiceIntegration;
+
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
 import com.example.services.validators.ServiceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,7 @@ public class SubscriptionService {
     private final SubscriptionConverter subscriptionConverter;
     private final AccountServiceIntegration accountService;
     private final ServiceValidator serviceValidator;
+
 
 
     public Page<SubscriptionResponse> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
@@ -71,6 +76,7 @@ public class SubscriptionService {
 
 
     @Transactional
+
     public SubscriptionResponse update(Long subId, Long disciplineId, Integer workoutCount, Integer daysToExpire, BigDecimal price) {
         Subscription sub = subscriptionRepository.findById(subId).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + subId + " не найден!"));
         if (disciplineId != null) sub.setDiscipline(disciplineService.findById(disciplineId).get());
@@ -106,6 +112,7 @@ public class SubscriptionService {
                 .numOfWorkouts(sub.getWorkoutCount())
                 .build();
         accountService.makeABuy(productRequest);
+
 
     }
 }
