@@ -1,6 +1,7 @@
 package com.example.services.services;
 
 
+import com.example.services.converters.SubscriptionConverter;
 import com.example.services.dto.SubscriptionDto;
 import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
@@ -11,13 +12,15 @@ import com.example.services.repository.DisciplineRepository;
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
 import com.example.services.validators.ServiceValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -26,19 +29,17 @@ import java.util.Optional;
 Полностью переделать
  */
 @Slf4j
-@org.springframework.stereotype.Service
+@Service
+@RequiredArgsConstructor
 public class SubscriptionService {
 
 
-    SubscriptionRepository subscriptionRepository;
-    DisciplineRepository disciplineRepository;
-    ServiceValidator serviceValidator;
+    private final SubscriptionRepository subscriptionRepository;
+    private final DisciplineRepository disciplineRepository;
+    private final ServiceValidator serviceValidator;
+    private final SubscriptionConverter subscriptionConverter;
 
-    @Autowired
-    public SubscriptionService(SubscriptionRepository subscriptionRepository, DisciplineRepository disciplineRepository) {
-        this.subscriptionRepository = subscriptionRepository;
-        this.disciplineRepository = disciplineRepository;
-    }
+
 
 
     public Page<Subscription> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
@@ -71,22 +72,22 @@ public class SubscriptionService {
 
 
     @Transactional
-    public Subscription update(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
+    public SubscriptionDto update(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
         Subscription service = subscriptionRepository.findById(subId).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + subId + " не найден!"));
 //        service.setTitle(SubscriptionDto.getTitle());
         service.setPrice(price);
 //        service.setDescription(service.getDescription());
-        return service;
+        return subscriptionConverter.entityInDto(service);
     }
 
-    public Subscription addSubscription(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
+    public SubscriptionDto addSubscription(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
         Subscription subscription = new Subscription();
         Optional<Discipline> discipline = disciplineRepository.findById(disciplineId);
         Discipline resolvedDiscipline = discipline.orElseThrow(() -> new ResourceNotFoundException("Дисциплина ID:"+ disciplineId +" не найдена"));
         subscription.setDiscipline(resolvedDiscipline);
         subscription.setWorkoutCount(workoutCount);
+        subscriptionRepository.save(subscription);
 
-
-        return subscriptionRepository.save(subscription);
+        return subscriptionConverter.entityInDto(subscription);
     }
 }

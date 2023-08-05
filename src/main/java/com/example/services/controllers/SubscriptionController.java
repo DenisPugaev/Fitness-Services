@@ -54,7 +54,7 @@ public class SubscriptionController {
 
     //С фронта поэтому лучше Request param
     @PostMapping("/update")
-    public Subscription updateService(
+    public SubscriptionDto updateService(
             @RequestParam(name = "subId") Long subId,
             @RequestParam(name = "discId", required = false) Long disciplineId,
             @RequestParam(name = "workCount", required = false) Integer workoutCount,
@@ -71,7 +71,7 @@ public class SubscriptionController {
     }
 
     @PostMapping("/add")
-    public Subscription addService(
+    public SubscriptionDto addService(
             @RequestParam(name = "subId") Long subId,
             @RequestParam(name = "discId") Long disciplineId,
             @RequestParam(name = "workCount") Integer workoutCount,
