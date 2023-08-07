@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 @Builder
 public class SubscriptionResponse {
 
-    private  Long id;
+    private Long id;
     private String discipline;
     private int workoutCount;
-    Integer daysToExpire;
+    private Integer daysToExpire;
     private BigDecimal price;
 }
