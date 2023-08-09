@@ -2,6 +2,7 @@ package com.example.services.controllers;
 
 
 
+import com.example.services.dto.DisciplineResponse;
 import com.example.services.dto.SubscriptionResponse;
 
 import com.example.services.exceptions.ResourceNotFoundException;
@@ -51,6 +52,12 @@ public class SubscriptionController {
                 .orElseThrow(() -> new ResourceNotFoundException("Service not found, id: " + id));
 
     }
+
+    @GetMapping("/discipline")
+    public DisciplineResponse getDisciplineInfo(@RequestParam(name="discName")String discName){
+        return subscriptionService.getDisciplineInfo(discName);
+    }
+
 
 
     //С фронта поэтому лучше Request param

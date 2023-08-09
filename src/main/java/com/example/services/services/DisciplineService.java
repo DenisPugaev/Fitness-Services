@@ -19,4 +19,8 @@ public class DisciplineService {
         return disciplineRepository.findById(id);
     }
 
+    public Optional<Discipline> findByName(String name){
+        return disciplineRepository.findByName(name);
+    }
+
 }

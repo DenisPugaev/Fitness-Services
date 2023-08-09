@@ -3,6 +3,7 @@ package com.example.services.services;
 
 import com.example.services.converters.SubscriptionConverter;
 
+import com.example.services.dto.DisciplineResponse;
 import com.example.services.dto.SubscriptionResponse;
 import com.example.services.dto.SubscriptionToProductRequest;
 import com.example.services.entities.Discipline;
@@ -114,5 +115,13 @@ public class SubscriptionService {
         accountService.makeABuy(productRequest);
 
 
+    }
+
+    public DisciplineResponse getDisciplineInfo(String discName) {
+        Discipline disc = disciplineService.findByName(discName).orElseThrow(()->new ResourceNotFoundException("дисциплина не найдена"));
+        DisciplineResponse disciplineResponse = new DisciplineResponse();
+        disciplineResponse.setName(discName);
+        disciplineResponse.setDescription(disc.getDescription());
+        return disciplineResponse;
     }
 }
