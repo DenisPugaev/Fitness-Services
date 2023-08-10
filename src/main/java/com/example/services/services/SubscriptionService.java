@@ -2,13 +2,15 @@ package com.example.services.services;
 
 
 import com.example.services.converters.SubscriptionConverter;
-import com.example.services.dto.SubscriptionDto;
+
+import com.example.services.dto.DisciplineResponse;
+import com.example.services.dto.SubscriptionResponse;
+import com.example.services.dto.SubscriptionToProductRequest;
 import com.example.services.entities.Discipline;
 import com.example.services.entities.Subscription;
 import com.example.services.exceptions.ResourceNotFoundException;
+import com.example.services.integrations.AccountServiceIntegration;
 
-import com.example.services.exceptions.ValidationException;
-import com.example.services.repository.DisciplineRepository;
 import com.example.services.repository.SubscriptionRepository;
 import com.example.services.repository.specifications.SubscriptionSpecifications;
 import com.example.services.validators.ServiceValidator;
@@ -24,9 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
+
 /**
-Полностью переделать
+ * Полностью переделать
  */
 @Slf4j
 @Service
@@ -35,14 +39,14 @@ public class SubscriptionService {
 
 
     private final SubscriptionRepository subscriptionRepository;
-    private final DisciplineRepository disciplineRepository;
-    private final ServiceValidator serviceValidator;
+    private final DisciplineService disciplineService;
     private final SubscriptionConverter subscriptionConverter;
+    private final AccountServiceIntegration accountService;
+    private final ServiceValidator serviceValidator;
 
 
 
-
-    public Page<Subscription> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
+    public Page<SubscriptionResponse> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
         Specification<Subscription> spec = Specification.where(null);
         if (minPrice != null) {
             spec = spec.and(SubscriptionSpecifications.priceGreaterOrEqualsThan(minPrice));
@@ -50,16 +54,17 @@ public class SubscriptionService {
         if (maxPrice != null) {
             spec = spec.and(SubscriptionSpecifications.priceLessThanOrEqualsThan(maxPrice));
         }
-       
+
         log.info(subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id"))).toString());
 
-
-        return subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id")));
+        return subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id")))
+                .map(subscriptionConverter::subscriptionToResponse);
     }
 
 
-    public Optional<Subscription> findById(Long id) {
-        return subscriptionRepository.findById(id);
+    public Optional<SubscriptionResponse> findById(Long id) throws ResourceNotFoundException {
+        return subscriptionRepository.findById(id)
+                .map(subscriptionConverter::subscriptionToResponse);
     }
 
     public Subscription save(Subscription subscription) {
@@ -72,22 +77,51 @@ public class SubscriptionService {
 
 
     @Transactional
-    public SubscriptionDto update(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
-        Subscription service = subscriptionRepository.findById(subId).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + subId + " не найден!"));
-//        service.setTitle(SubscriptionDto.getTitle());
-        service.setPrice(price);
-//        service.setDescription(service.getDescription());
-        return subscriptionConverter.entityInDto(service);
+
+    public SubscriptionResponse update(Long subId, Long disciplineId, Integer workoutCount, Integer daysToExpire, BigDecimal price) {
+        Subscription sub = subscriptionRepository.findById(subId).orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + subId + " не найден!"));
+        if (disciplineId != null) sub.setDiscipline(disciplineService.findById(disciplineId).get());
+        if (workoutCount != null) sub.setWorkoutCount(workoutCount);
+        if (daysToExpire != null) sub.setDaysToExpire(daysToExpire);
+        if (price != null) sub.setPrice(price);
+        serviceValidator.validate(sub);
+        subscriptionRepository.save(sub);
+        return subscriptionConverter.subscriptionToResponse(sub);
     }
 
-    public SubscriptionDto addSubscription(Long subId,Long disciplineId,Integer workoutCount,Integer daysToExpire,BigDecimal price) {
+    public SubscriptionResponse addSubscription(Long disciplineId, Integer workoutCount, Integer daysToExpire, BigDecimal price) {
         Subscription subscription = new Subscription();
-        Optional<Discipline> discipline = disciplineRepository.findById(disciplineId);
-        Discipline resolvedDiscipline = discipline.orElseThrow(() -> new ResourceNotFoundException("Дисциплина ID:"+ disciplineId +" не найдена"));
-        subscription.setDiscipline(resolvedDiscipline);
+        Optional<Discipline> discipline = disciplineService.findById(disciplineId);
+        subscription.setDiscipline(discipline.get());
         subscription.setWorkoutCount(workoutCount);
+        subscription.setDaysToExpire(daysToExpire);
+        subscription.setPrice(price);
+        serviceValidator.validate(subscription);
         subscriptionRepository.save(subscription);
+        return subscriptionConverter.subscriptionToResponse(subscription);
+    }
 
-        return subscriptionConverter.entityInDto(subscription);
+    @Transactional
+    public void makeABuy(String login, Long id) {
+
+        Subscription sub = subscriptionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Невозможно обновить услугу! ID:" + id + " не найден!"));
+        SubscriptionToProductRequest productRequest = SubscriptionToProductRequest.builder()
+                .login(login)
+                .discipline(sub.getDiscipline().getName())
+                .expired(LocalDate.now().plusDays(sub.getDaysToExpire()))
+                .numOfWorkouts(sub.getWorkoutCount())
+                .build();
+        accountService.makeABuy(productRequest);
+
+
+    }
+
+    public DisciplineResponse getDisciplineInfo(String discName) {
+        Discipline disc = disciplineService.findByName(discName).orElseThrow(()->new ResourceNotFoundException("дисциплина не найдена"));
+        DisciplineResponse disciplineResponse = new DisciplineResponse();
+        disciplineResponse.setName(discName);
+        disciplineResponse.setDescription(disc.getDescription());
+        return disciplineResponse;
     }
 }
