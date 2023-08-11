@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Slf4j
@@ -31,8 +32,8 @@ public class SubscriptionController {
 
     //    http://localhost:8193/subscription-service/api/v1/subscriptions?page=1
     @GetMapping("/get-all")
-    public Page<SubscriptionResponse> findAllService(
-
+    public List<SubscriptionResponse> findAllService(){
+/*
             @RequestParam(name = "page") Integer page,
             @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
             @RequestParam(name = "max_price", required = false) BigDecimal maxPrice,
@@ -41,8 +42,8 @@ public class SubscriptionController {
         log.debug(String.format("%nLogParam - Page: %s%n minPrice: %f%n maxPrice: %f%n namePart: %s%n", page, minPrice, maxPrice, titlePart));
         if (page < 1) {
             page = 1;
-        }
-        return subscriptionService.findAll(minPrice, maxPrice, titlePart, page);
+        }*/
+        return subscriptionService.findAll();
     }
 
     @GetMapping("/{id}")

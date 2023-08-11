@@ -7,5 +7,6 @@ import com.example.services.entities.Subscription; import org.springframework.da
  Репозиторий для работы с сущностью "Подписка". */
 
 @Repository
-public interface SubscriptionRepository extends JpaRepository<Subscription, Long>, JpaSpecificationExecutor<Subscription> {
+public interface SubscriptionRepository extends JpaRepository<Subscription, Long>{
+    //, JpaSpecificationExecutor<Subscription> {
 }

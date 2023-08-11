@@ -27,7 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Полностью переделать
@@ -46,19 +48,20 @@ public class SubscriptionService {
 
 
 
-    public Page<SubscriptionResponse> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
+    public List<SubscriptionResponse> findAll() {
         Specification<Subscription> spec = Specification.where(null);
-        if (minPrice != null) {
+/*        if (minPrice != null) {
             spec = spec.and(SubscriptionSpecifications.priceGreaterOrEqualsThan(minPrice));
         }
         if (maxPrice != null) {
             spec = spec.and(SubscriptionSpecifications.priceLessThanOrEqualsThan(maxPrice));
         }
 
-        log.info(subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id"))).toString());
+        log.info(subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id"))).toString());*/
 
-        return subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id")))
-                .map(subscriptionConverter::subscriptionToResponse);
+        //return subscriptionRepository.findAll(spec, PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "Id")))
+        return subscriptionRepository.findAll().stream()
+                .map(subscriptionConverter::subscriptionToResponse).collect(Collectors.toList());
     }
 
 
