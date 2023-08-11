@@ -30,7 +30,7 @@ public class SubscriptionController {
     private final ServiceValidator serviceValidator;
 
     //    http://localhost:8193/subscription-service/api/v1/subscriptions?page=1
-    @GetMapping("get-all")
+    @GetMapping("/get-all")
     public Page<SubscriptionResponse> findAllService(
 
             @RequestParam(name = "page") Integer page,
