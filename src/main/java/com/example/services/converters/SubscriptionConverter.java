@@ -1,41 +1,36 @@
 package com.example.services.converters;
 
-import com.example.services.dto.SubscriptionDto;
-import com.example.services.entities.Discipline;
+import com.example.services.dto.SubscriptionResponse;
 import com.example.services.entities.Subscription;
 import com.example.services.repository.DisciplineRepository;
 import org.springframework.stereotype.Component;
 
-/**
- * ПЕРЕДЕЛАТЬ
- *
- * Класс "SubscriptionConverter" представляет сущность конвертера подписки.
- * Он отвечает за преобразование между объектами класса Subscription и SubscriptionDto.
- */
+
+
 @Component
 public class SubscriptionConverter {
    private DisciplineRepository disciplineRepository;
 
-    /**
-     * Метод dtoInEntity выполняет преобразование объекта SubscriptionDto в объект Subscription.
-     *
-     * @param subscriptionDto объект SubscriptionDto
-     * @return объект Subscription
-     */
-    public  Subscription dtoInEntity(SubscriptionDto subscriptionDto) {
-        // Проверить и исправить null
-        Discipline discipline = new Discipline(null, null, null);
-        return new Subscription(discipline, subscriptionDto.getEndDate(), subscriptionDto.getPrice(), subscriptionDto.getWorkoutCount());
+
+
+    public SubscriptionResponse subscriptionToResponse(Subscription subscription){
+        return SubscriptionResponse.builder()
+                .id(subscription.getId())
+                .discipline(subscription.getDiscipline().getName())
+                .workoutCount(subscription.getWorkoutCount())
+                .daysToExpire(subscription.getDaysToExpire())
+                .price(subscription.getPrice())
+                .build();
+
     }
 
-    /**
-     * Метод entityInDto выполняет преобразование объекта Subscription в объект SubscriptionDto.
-     *
-     * @param subscription объект Subscription
-     * @return объект SubscriptionDto
-     */
-    public  SubscriptionDto entityInDto(Subscription subscription) {
-        Long disciplineId = subscription.getDiscipline() != null ? subscription.getDiscipline().getId() : null;
-        return new SubscriptionDto(subscription.getId(), disciplineId, subscription.getWorkoutCount(), subscription.getEndDate(), subscription.getPrice());
+    public SubscriptionResponse subscriptionToRequest(Subscription subscription){
+        return SubscriptionResponse.builder()
+                .discipline(subscription.getDiscipline().getName())
+                .workoutCount(subscription.getWorkoutCount())
+                .daysToExpire(subscription.getDaysToExpire())
+                .price(subscription.getPrice())
+                .build();
+
     }
 }

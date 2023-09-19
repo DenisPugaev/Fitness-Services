@@ -23,14 +23,14 @@ public class Discipline {
 
     @Column(name = "description")
     private String description;
+    @OneToMany(mappedBy = "discipline", cascade = CascadeType.PERSIST)
+    private List<Subscription> subscriptions;
 
     public Discipline(Long disciplineId, String name, String description) {
         this.name = name;
         this.description = description;
     }
-    
-    @OneToMany(mappedBy = "discipline",cascade =CascadeType.PERSIST)
-    private List<Subscription> subscriptions;
+
     public Discipline() {
     }
 }

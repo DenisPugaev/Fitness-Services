@@ -15,4 +15,6 @@ import java.util.Optional;
 
 public interface DisciplineRepository extends JpaRepository<Discipline, Long>{
 
+    Optional<Discipline> findByName(String name);
+
 }

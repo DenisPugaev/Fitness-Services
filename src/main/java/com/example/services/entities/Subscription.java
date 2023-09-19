@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 
 
 /**
@@ -28,23 +28,13 @@ public class Subscription {
     @Column(name = "workout_count")
     private int workoutCount;
 
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @Column(name = "days_to_expire")
+    private Integer DaysToExpire;
 
     @Column(name = "price")
     private BigDecimal price;
 
 
-
-    public Subscription(Discipline discipline, LocalDate endDate, BigDecimal price, int workoutCount) {
-        this.discipline = discipline;
-        this.endDate = endDate;
-        this.price = price;
-        this.workoutCount = workoutCount;
-    }
-
-    public Subscription() {
-    }
 
 
 }

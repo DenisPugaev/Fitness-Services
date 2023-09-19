@@ -1,6 +1,5 @@
 package com.example.services.dto;
 
-import com.example.services.entities.Discipline;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +10,10 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubscriptionDto {
-    private Long id;
+public class SubscriptionRequest {
+
     private Long disciplineId;
-    private int workoutCount;
-    private LocalDate endDate;
+    private Integer workoutCount;
+    private Integer daysToExpire;
     private BigDecimal price;
 }
